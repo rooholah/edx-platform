@@ -845,6 +845,9 @@ class ProgramEnrollmentsInspectorViewTests(SupportViewTestCase):
             'IdPSelect': self.org_key_list[0]
         })
         expected_info = {
+            'user': {
+                'external_user_key': self.external_user_key,
+            },
             'enrollments': expected_enrollments
         }
 

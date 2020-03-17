@@ -4,10 +4,10 @@ import { Button, InputText, StatusAlert, InputSelect } from '@edx/paragon';
 
 
 const renderUserSection = userObj => (
-  <div>
-    <h2>
+  <div ClassName="user-section">
+    <h3>
       edX account Info
-    </h2>
+    </h3>
     <div>
       <div><span>Username: </span> {userObj.username}</div>
       <div><span>Email: </span> {userObj.email}</div>
@@ -16,7 +16,7 @@ const renderUserSection = userObj => (
       )}
       {userObj.SSO ? (
         <div>
-          <h3>Single Sign On Record:</h3>
+          <h4>Single Sign On Record:</h4>
           <div><span>UID</span>{userObj.SSO.uid}</div>
           <div><span>Identity Provider</span>{userObj.SSO.provider}</div>
         </div>
@@ -28,10 +28,10 @@ const renderUserSection = userObj => (
 
 
 const renderVerificationSection = verificationStatus => (
-  <div>
-    <h2>
+  <div ClassName="verification-section">
+    <h3>
       ID Verification
-    </h2>
+    </h3>
     <div>
       <div><span>Status: </span> {verificationStatus.status}</div>
       <div><span>Verification Error: </span> {verificationStatus.error}</div>
@@ -45,12 +45,12 @@ const renderVerificationSection = verificationStatus => (
 
 const renderEnrollmentsSection = enrollments => (
   <div>
-    <h2>
+    <h3>
       Program Enrollments
-    </h2>
+    </h3>
     <div>
       {enrollments.map(enrollment => (
-        <div>
+        <div key={enrollment.program_uuid} ClassName="enrollment-container">
           <div>For Program {enrollment.program_uuid}, the enrollment record is</div>
           <div> <span>Status: </span> {enrollment.status} </div>
           <div> <span>Created: </span> {enrollment.created} </div>
@@ -58,14 +58,14 @@ const renderEnrollmentsSection = enrollments => (
           <div> <span>External User Key: </span> {enrollment.external_user_key} </div>
           {enrollment.program_course_enrollments && enrollment.program_course_enrollments.map(
             programCourseEnrollment => (
-              <div>
-                <h3>Course {programCourseEnrollment.course_key}</h3>
+              <div key={programCourseEnrollment.course_key} ClassName="course-enrollment-container">
+                <h4>Course {programCourseEnrollment.course_key}</h4>
                 <div><span>Status: </span> {programCourseEnrollment.status} </div>
                 <div> <span>Created: </span> {programCourseEnrollment.created} </div>
                 <div> <span>Last updated: </span> {programCourseEnrollment.modified} </div>
                 {programCourseEnrollment.course_enrollment && (
-                  <div>
-                    <h4>Linked course enrollment</h4>
+                  <div ClassName="student-course-enrollment-container">
+                    <h5>Linked course enrollment</h5>
                     <div><span>Course ID: </span>
                       {programCourseEnrollment.course_enrollment.course_id}
                     </div>
@@ -89,7 +89,20 @@ const renderEnrollmentsSection = enrollments => (
 
 export const ProgramEnrollmentsInspectorPage = props => (
   <div>
+    <div id="search_result_table_container">
+      <h2> Search Result </h2>
+      {props.learnerInfo &&
+        props.learnerInfo.user &&
+        renderUserSection(props.learnerInfo.user)}
+      {props.learnerInfo &&
+        props.learnerInfo.id_verification &&
+        renderVerificationSection(props.learnerInfo.id_verification)}
+      {props.learnerInfo &&
+        props.learnerInfo.enrollments &&
+        renderEnrollmentsSection(props.learnerInfo.enrollments)}
+    </div>
     <form method="get">
+      <h2>Search For A Masters Learner Below</h2>
       {props.errors.map(errorItem => (
         <StatusAlert
           open
@@ -133,20 +146,8 @@ export const ProgramEnrollmentsInspectorPage = props => (
           }
         />
       </div>
-      <Button label="Search" type="submit" className={['btn', 'btn-primary']} />
+      <Button label="Search" type="submit" ClassName={['btn', 'btn-primary']} />
     </form>
-    <div id="search_result_table_container">
-      <h1> Search Result </h1>
-      {props.learnerInfo &&
-        props.learnerInfo.user &&
-        renderUserSection(props.learnerInfo.user)}
-      {props.learnerInfo &&
-        props.learnerInfo.id_verification &&
-        renderVerificationSection(props.learnerInfo.id_verification)}
-      {props.learnerInfo &&
-        props.learnerInfo.enrollments &&
-        renderEnrollmentsSection(props.learnerInfo.enrollments)}
-    </div>
   </div>
 );
 
@@ -154,20 +155,43 @@ ProgramEnrollmentsInspectorPage.propTypes = {
   errors: PropTypes.arrayOf(PropTypes.string),
   learnerInfo: PropTypes.shape({
     user: PropTypes.shape({
-      external_user_key: PropTypes.string,
       username: PropTypes.string,
+      email: PropTypes.email,
+      external_user_key: PropTypes.string,
+      SSO: PropTypes.shape({
+        uid: PropTypes.string,
+        provider: PropTypes.string,
+      }),
     }),
     id_verification: PropTypes.shape({
       status: PropTypes.string,
       error: PropTypes.string,
-      should_display: PropTypes.string,
+      should_display: PropTypes.bool,
       verification_expiry: PropTypes.string,
     }),
     enrollments: PropTypes.arrayOf(
-      PropTypes.string,
+      PropTypes.shape({
+        created: PropTypes.string,
+        modified: PropTypes.string,
+        program_uuid: PropTypes.string,
+        status: PropTypes.string,
+        external_user_key: PropTypes.string,
+        program_course_enrollments: PropTypes.arrayOf(
+          PropTypes.shape({
+            course_key: PropTypes.string,
+            created: PropTypes.string,
+            modified: PropTypes.string,
+            status: PropTypes.string,
+            course_enrollment: PropTypes.shape({
+              course_id: PropTypes.string,
+              is_active: PropTypes.bool,
+              mode: PropTypes.string,
+            }),
+          })),
+      }),
     ),
   }),
-  orgKeys: PropTypes.arrayOf(PropTypes.object),
+  orgKeys: PropTypes.arrayOf(PropTypes.string),
 };
 
 ProgramEnrollmentsInspectorPage.defaultProps = {

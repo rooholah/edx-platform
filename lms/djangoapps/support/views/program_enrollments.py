@@ -214,6 +214,8 @@ class ProgramEnrollmentsInspectorView(View):
             user_info = self._serialize_user_info(user, user_social_auth)
             result['user'] = user_info
             result['id_verification'] = IDVerificationService.user_status(user)
+        else:
+            result['user'] = {'external_user_key': external_user_key}
         enrollments = self._get_enrollments(external_user_key=external_user_key)
         if enrollments:
             result['enrollments'] = enrollments
