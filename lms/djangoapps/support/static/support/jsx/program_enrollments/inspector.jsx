@@ -4,7 +4,7 @@ import { Button, InputText, StatusAlert, InputSelect } from '@edx/paragon';
 
 
 const renderUserSection = userObj => (
-  <div ClassName="user-section">
+  <div>
     <h3>
       edX account Info
     </h3>
@@ -28,11 +28,11 @@ const renderUserSection = userObj => (
 
 
 const renderVerificationSection = verificationStatus => (
-  <div ClassName="verification-section">
+  <div>
     <h3>
       ID Verification
     </h3>
-    <div>
+    <div className="panel-body">
       <div><span>Status: </span> {verificationStatus.status}</div>
       <div><span>Verification Error: </span> {verificationStatus.error}</div>
       <div><span>Should Display Verification: </span> {verificationStatus.should_display}</div>
@@ -50,7 +50,7 @@ const renderEnrollmentsSection = enrollments => (
     </h3>
     <div>
       {enrollments.map(enrollment => (
-        <div key={enrollment.program_uuid} ClassName="enrollment-container">
+        <div key={enrollment.program_uuid}>
           <div>For Program {enrollment.program_uuid}, the enrollment record is</div>
           <div> <span>Status: </span> {enrollment.status} </div>
           <div> <span>Created: </span> {enrollment.created} </div>
@@ -58,13 +58,13 @@ const renderEnrollmentsSection = enrollments => (
           <div> <span>External User Key: </span> {enrollment.external_user_key} </div>
           {enrollment.program_course_enrollments && enrollment.program_course_enrollments.map(
             programCourseEnrollment => (
-              <div key={programCourseEnrollment.course_key} ClassName="course-enrollment-container">
+              <div key={programCourseEnrollment.course_key}>
                 <h4>Course {programCourseEnrollment.course_key}</h4>
                 <div><span>Status: </span> {programCourseEnrollment.status} </div>
                 <div> <span>Created: </span> {programCourseEnrollment.created} </div>
                 <div> <span>Last updated: </span> {programCourseEnrollment.modified} </div>
                 {programCourseEnrollment.course_enrollment && (
-                  <div ClassName="student-course-enrollment-container">
+                  <div>
                     <h5>Linked course enrollment</h5>
                     <div><span>Course ID: </span>
                       {programCourseEnrollment.course_enrollment.course_id}
@@ -78,8 +78,7 @@ const renderEnrollmentsSection = enrollments => (
                   </div>
                 )}
               </div>
-            )
-          )}
+            ))}
         </div>
       ))}
     </div>
@@ -146,7 +145,7 @@ export const ProgramEnrollmentsInspectorPage = props => (
           }
         />
       </div>
-      <Button label="Search" type="submit" ClassName={['btn', 'btn-primary']} />
+      <Button label="Search" type="submit" className={['btn', 'btn-primary']} />
     </form>
   </div>
 );
