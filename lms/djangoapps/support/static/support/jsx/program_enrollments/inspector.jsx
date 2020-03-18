@@ -8,21 +8,20 @@ const renderUserSection = userObj => (
     <h3>
       edX account Info
     </h3>
-    <div>
-      <div><span>Username: </span> {userObj.username}</div>
-      <div><span>Email: </span> {userObj.email}</div>
-      {userObj.external_user_key && (
-        <div><span>External User Key</span>: {userObj.external_user_key}</div>
-      )}
-      {userObj.SSO ? (
-        <div>
-          <h4>Single Sign On Record:</h4>
-          <div><span>UID</span>{userObj.SSO.uid}</div>
-          <div><span>Identity Provider</span>{userObj.SSO.provider}</div>
-        </div>
-      ) : (
-        <div> There is no Single Signed On record associated with this user!</div>)}
-    </div>
+    <div><span>Username: </span> {userObj.username}</div>
+    <div><span>Email: </span> {userObj.email}</div>
+    {userObj.external_user_key && (
+      <div><span>External User Key</span>: {userObj.external_user_key}</div>
+    )}
+    {userObj.SSO ? (
+      <div>
+        <h4>Single Sign On Record:</h4>
+        <div><span>UID</span>{userObj.SSO.uid}</div>
+        <div><span>Identity Provider</span>{userObj.SSO.provider}</div>
+      </div>
+    ) : (
+      <div> There is no Single Signed On record associated with this user!</div>)}
+    <hr />
   </div>
 );
 
@@ -32,14 +31,13 @@ const renderVerificationSection = verificationStatus => (
     <h3>
       ID Verification
     </h3>
-    <div className="panel-body">
-      <div><span>Status: </span> {verificationStatus.status}</div>
-      <div><span>Verification Error: </span> {verificationStatus.error}</div>
-      <div><span>Should Display Verification: </span> {verificationStatus.should_display}</div>
-      <div><span>Verification Expiration Date: </span>
-        {verificationStatus.verification_expiry}
-      </div>
+    <div><span>Status: </span> {verificationStatus.status}</div>
+    <div><span>Verification Error: </span> {verificationStatus.error}</div>
+    <div><span>Should Display Verification: </span> {verificationStatus.should_display}</div>
+    <div><span>Verification Expiration Date: </span>
+      {verificationStatus.verification_expiry}
     </div>
+    <hr />
   </div>
 );
 
@@ -48,40 +46,41 @@ const renderEnrollmentsSection = enrollments => (
     <h3>
       Program Enrollments
     </h3>
-    <div>
-      {enrollments.map(enrollment => (
-        <div key={enrollment.program_uuid}>
-          <div>For Program {enrollment.program_uuid}, the enrollment record is</div>
-          <div> <span>Status: </span> {enrollment.status} </div>
-          <div> <span>Created: </span> {enrollment.created} </div>
-          <div> <span>Last updated: </span> {enrollment.modified} </div>
-          <div> <span>External User Key: </span> {enrollment.external_user_key} </div>
-          {enrollment.program_course_enrollments && enrollment.program_course_enrollments.map(
-            programCourseEnrollment => (
-              <div key={programCourseEnrollment.course_key}>
-                <h4>Course {programCourseEnrollment.course_key}</h4>
-                <div><span>Status: </span> {programCourseEnrollment.status} </div>
-                <div> <span>Created: </span> {programCourseEnrollment.created} </div>
-                <div> <span>Last updated: </span> {programCourseEnrollment.modified} </div>
-                {programCourseEnrollment.course_enrollment && (
-                  <div>
-                    <h5>Linked course enrollment</h5>
-                    <div><span>Course ID: </span>
-                      {programCourseEnrollment.course_enrollment.course_id}
-                    </div>
-                    <div> <span>Is Active: </span>
-                      {programCourseEnrollment.course_enrollment.is_active}
-                    </div>
-                    <div> <span>Mode / Track: </span>
-                      {programCourseEnrollment.course_enrollment.mode}
-                    </div>
+    {enrollments.map(enrollment => (
+      <div key={enrollment.program_uuid}>
+        <div>Program {enrollment.program_uuid} Enrollments</div>
+        <div> <span>Status: </span> {enrollment.status} </div>
+        <div> <span>Created: </span> {enrollment.created} </div>
+        <div> <span>Last updated: </span> {enrollment.modified} </div>
+        <div> <span>External User Key: </span> {enrollment.external_user_key} </div>
+        {enrollment.program_course_enrollments && enrollment.program_course_enrollments.map(
+          programCourseEnrollment => (
+            <div key={programCourseEnrollment.course_key}>
+              <br />
+              <h4>Course {programCourseEnrollment.course_key}</h4>
+              <div> <span>Status: </span> {programCourseEnrollment.status} </div>
+              <div> <span>Created: </span> {programCourseEnrollment.created} </div>
+              <div> <span>Last updated: </span> {programCourseEnrollment.modified} </div>
+              {programCourseEnrollment.course_enrollment && (
+                <div>
+                  <br />
+                  <h4>Linked course enrollment</h4>
+                  <div><span>Course ID: </span>
+                    {programCourseEnrollment.course_enrollment.course_id}
                   </div>
-                )}
-              </div>
-            ))}
-        </div>
-      ))}
-    </div>
+                  <div> <span>Is Active: </span>
+                    {programCourseEnrollment.course_enrollment.is_active}
+                  </div>
+                  <div> <span>Mode / Track: </span>
+                    {programCourseEnrollment.course_enrollment.mode}
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+      </div>
+    ))}
+    <hr />
   </div>
 );
 
