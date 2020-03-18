@@ -145,7 +145,7 @@ class ProgramEnrollmentsInspectorView(View):
                         external_user_key
                     )
                 )
-        else:
+        elif org_key and not external_user_key:
             errors.append(
                 'You must provide either the edX username or email, or the '
                 'Learner Account Provider and External Key pair to do search!'

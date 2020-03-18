@@ -16,8 +16,8 @@ const renderUserSection = userObj => (
     {userObj.SSO ? (
       <div>
         <h4>Single Sign On Record:</h4>
-        <div><span>UID</span>{userObj.SSO.uid}</div>
-        <div><span>Identity Provider</span>{userObj.SSO.provider}</div>
+        <div><span>UID: </span>{userObj.SSO.uid}</div>
+        <div><span>Identity Provider: </span>{userObj.SSO.provider}</div>
       </div>
     ) : (
       <div> There is no Single Signed On record associated with this user!</div>)}
